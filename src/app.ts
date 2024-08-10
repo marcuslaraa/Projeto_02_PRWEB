@@ -1,5 +1,6 @@
 import express from "express"
 import { atualizarCategoriaPorId, consultarCategoriaPorId, deletarCategoriaPorId, inserirCategoria, listarCategorias } from './controller/CategoriaController'
+import { atualizarLivroPorId, consultarLivroPorId, deletarLivroPorId, inserirLivro, listarLivros } from './controller/LivroController'
 
 const app = express()
 const PORT = process.env.PORT ?? 3000
@@ -16,5 +17,11 @@ app.delete('/categoria/:id', deletarCategoriaPorId)
 app.put('/categoria/:id', atualizarCategoriaPorId)
 app.get('/categoria', listarCategorias)
 
+//LIVRO ENDPOINTS
+app.post('/livro', inserirLivro)
+app.get('/livro/:id', consultarLivroPorId)
+app.delete('/livro/:id', deletarLivroPorId)
+app.put('/livro/:id', atualizarLivroPorId)
+app.get('/livro', listarLivros)
 
 app.listen(PORT, logInfo)

@@ -8,10 +8,10 @@ export class LivroRepository {
 
   async createTable() {
     const query = `
-        CREATE TABLE IF NOT EXISTS biblioteca.categoria (
+        CREATE TABLE IF NOT EXISTS biblioteca.livros (
             _id INT AUTO_INCREMENT PRIMARY KEY,
             titulo VARCHAR(50) NOT NULL,
-            auto VARCHAR(50) NOT NULL,
+            autor VARCHAR(50) NOT NULL,
             categoriaId INT NOT NULL
         )`
     try {
@@ -22,7 +22,7 @@ export class LivroRepository {
     }
   }
 
-  async insertUser(novoLivro: Livro): Promise<Livro> {
+  async inserirLivro(novoLivro: Livro): Promise<Livro> {
     const query = `
         INSERT INTO biblioteca.livros (titulo, autor, categoriaId)
         VALUES (?, ?, ?)`
@@ -39,8 +39,8 @@ export class LivroRepository {
     }
   }
 
-  async consultarCategoriaPorNome(titulo: string) {
-    const query = 'SELECT * FROM biblioteca.livros WHERE nome = ?'
+  async consultarLivroPorTitulo(titulo: string) {
+    const query = 'SELECT * FROM biblioteca.livros WHERE titulo = ?'
     try {
       const resultado = await executaComandoSQL(query, [titulo])
       if (resultado.length === 0) {
@@ -55,7 +55,7 @@ export class LivroRepository {
     }
   }
 
-  async consultarCategoriaPorID(id: number): Promise<Livro | null> {
+  async consultarLivroPorID(id: number): Promise<Livro | null> {
     const query = 'SELECT * FROM biblioteca.livros WHERE _id = ?'
     try {
       const resultado = await executaComandoSQL(query, [id])
@@ -71,7 +71,7 @@ export class LivroRepository {
     }
   }
 
-  async deletarCategoriaPorId(id: number): Promise<Livro> {
+  async deletarLivroPorId(id: number): Promise<Livro> {
     const query = 'DELETE FROM biblioteca.livros WHERE _id = ?'
     try {
       const resultado = await executaComandoSQL(query, [id])
@@ -84,7 +84,7 @@ export class LivroRepository {
     }
   }
 
-  async atualizarCategoriaPorId(novoLivro: Livro, id: number): Promise<Livro> {
+  async atualizarLivroPorId(novoLivro: Livro, id: number): Promise<Livro> {
     const query = 'UPDATE biblioteca.livros SET titulo = ?, autor = ? WHERE _id = ?'
     try {
       const resultado = await executaComandoSQL(query, [novoLivro.titulo, novoLivro.autor, id])
@@ -97,7 +97,7 @@ export class LivroRepository {
     }
   }
 
-  async listarCategorias(): Promise<Livro | null> {
+  async listarLivros(): Promise<Livro | null> {
     const query = 'SELECT * FROM biblioteca.livros'
     try {
       const resultado = await executaComandoSQL(query)

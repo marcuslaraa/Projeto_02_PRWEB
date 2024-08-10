@@ -1,8 +1,10 @@
 import { Categoria } from "../model/Categoria"
 import { CategoriaRepository } from "../repository/CategoriaRepository"
+import { LivroRepository } from '../repository/LivroRepository'
 
 export class CategoriaService {
   categoriaRepository = new CategoriaRepository();
+  livroRepository = new LivroRepository()
 
   async inserirCategoria(categoria: Categoria): Promise<Categoria> {
     const consultaCategoria = await this.categoriaRepository.consultarCategoriaPorNome(categoria.nome)
@@ -21,6 +23,8 @@ export class CategoriaService {
 
   async deletarCategoriaPorId(id: any): Promise<Categoria> {
     const consultaCategoria = await this.categoriaRepository.consultarCategoriaPorID(id)
+    const consultarCategoriaEmLivros = await this.livroRepository.consultarLivroPorID(id)
+    if (consultarCategoriaEmLivros) throw new Error('Não pode deletar categorias que estão aplicadas em algum livro.')
     if (!consultaCategoria) throw new Error('Não existe categoria com esse id')
     const deletarCategoria = await this.categoriaRepository.deletarCategoriaPorId(id)
     return deletarCategoria
