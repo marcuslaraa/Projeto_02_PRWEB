@@ -8,12 +8,14 @@ export class LivroRepository {
 
   async createTable() {
     const query = `
-        CREATE TABLE IF NOT EXISTS biblioteca.livros (
-            _id INT AUTO_INCREMENT PRIMARY KEY,
-            titulo VARCHAR(50) NOT NULL,
-            autor VARCHAR(50) NOT NULL,
-            categoriaId INT NOT NULL
-        )`
+    CREATE TABLE IF NOT EXISTS biblioteca.livros (
+      _id INT AUTO_INCREMENT PRIMARY KEY,
+      titulo VARCHAR(50) NOT NULL,
+      autor VARCHAR(50) NOT NULL,
+      categoriaId INT NOT NULL,
+      FOREIGN KEY (categoriaId) REFERENCES biblioteca.categorias(_id)
+);
+`
     try {
       const resultado = await executaComandoSQL(query, [])
       console.log("Query executada com sucesso:", resultado)

@@ -31,7 +31,6 @@ export class LivroService {
   }
 
   async atualizarLivroPorId(novoLivro: Livro, id: any): Promise<Livro | null> {
-    console.log(novoLivro)
     const consultarId = await this.livroRepository.consultarLivroPorID(id)
 
     if (!consultarId) throw new Error('Não existe livro com esse id para ser atualizado.')

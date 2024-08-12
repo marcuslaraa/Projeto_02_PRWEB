@@ -16,5 +16,6 @@ export class Livro {
   validade() {
     if (!this.titulo) throw new Error('Titulo não informado.')
     if (!this.autor) throw new Error('Autor não informado')
+    if (!this.categoriaId) throw new Error('categoriaId não informada.')
   }
 }
