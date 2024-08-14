@@ -27,6 +27,7 @@ export class EmprestimoRepository {
   }
 
   async inserirEmprestimo(novoEmprestimo: Emprestimo): Promise<Emprestimo> {
+    console.log(novoEmprestimo.dataEmprestimo)
     const query = `
         INSERT INTO biblioteca.emprestimos (livroId, usuarioId, data_emprestimo, data_devolucao)
         VALUES (?, ?, ?, ?)`
@@ -85,7 +86,7 @@ export class EmprestimoRepository {
     }
   }
 
-  async listarLivros(): Promise<Emprestimo | null> {
+  async listarEmprestimos(): Promise<Emprestimo | null> {
     const query = 'SELECT * FROM biblioteca.emprestimos'
     try {
       const resultado = await executaComandoSQL(query)

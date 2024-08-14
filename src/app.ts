@@ -2,7 +2,8 @@ import express from "express"
 import { atualizarCategoriaPorId, consultarCategoriaPorId, deletarCategoriaPorId, inserirCategoria, listarCategorias } from './controller/CategoriaController'
 import { atualizarLivroPorId, consultarLivroPorId, deletarLivroPorId, inserirLivro, listarLivros } from './controller/LivroController'
 import { atualizarPessoaPorId, consultarPessoaPorId, deletarPessoaPorId, inserirPessoa, listarPessoas } from './controller/PessoaController'
-import { atualizarUsuarioPorId, consultarUsuarioPorId, deletarUsuarioPorId, inserirUsuario, listarUsuarios } from './controller/UsuarioRepository'
+import { atualizarUsuarioPorId, consultarUsuarioPorId, deletarUsuarioPorId, inserirUsuario, listarUsuarios } from './controller/UsuarioController'
+import { inserirEmprestimo } from './controller/EmprestimoController'
 
 const app = express()
 const PORT = process.env.PORT ?? 3000
@@ -25,6 +26,9 @@ app.get('/usuario/:id', consultarUsuarioPorId)
 app.delete('/usuario/:id', deletarUsuarioPorId)
 app.put('/usuario/:id', atualizarUsuarioPorId)
 app.get('/usuario', listarUsuarios)
+
+//EMPRESTIMO ENDPOINTS
+app.post('/emprestimo', inserirEmprestimo)
 
 //LIVRO ENDPOINTS
 app.post('/livro', inserirLivro)
