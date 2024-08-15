@@ -44,10 +44,42 @@ export class EmprestimoRepository {
     }
   }
 
-  async consultarEmprestimoPorID(id: number): Promise<Emprestimo | null> {
+  async consultarEmprestimoPorId(id: number): Promise<Emprestimo | null> {
     const query = 'SELECT * FROM biblioteca.emprestimos WHERE _id = ?'
     try {
       const resultado = await executaComandoSQL(query, [id])
+      if (resultado.length === 0) {
+        return null
+      }
+      return new Promise<Emprestimo>((resolve) => {
+        resolve(resultado)
+      })
+    } catch (err: any) {
+      console.error('Falha na busca.')
+      throw err
+    }
+  }
+
+  async consultarEmprestimoPorLivroId(livroId: number): Promise<Emprestimo | null> {
+    const query = 'SELECT * FROM biblioteca.emprestimos WHERE livroId = ?'
+    try {
+      const resultado = await executaComandoSQL(query, [livroId])
+      if (resultado.length === 0) {
+        return null
+      }
+      return new Promise<Emprestimo>((resolve) => {
+        resolve(resultado)
+      })
+    } catch (err: any) {
+      console.error('Falha na busca.')
+      throw err
+    }
+  }
+
+  async consultarEmprestimoPorUsuarioId(usuarioId: number): Promise<Emprestimo | null> {
+    const query = 'SELECT * FROM biblioteca.emprestimos WHERE usuarioId = ?'
+    try {
+      const resultado = await executaComandoSQL(query, [usuarioId])
       if (resultado.length === 0) {
         return null
       }
@@ -74,9 +106,9 @@ export class EmprestimoRepository {
   }
 
   async atualizarEmprestimoPorId(novoEmprestimo: Emprestimo, id: number): Promise<Emprestimo> {
-    const query = 'UPDATE biblioteca.emprestimos SET data_devolucao = ? WHERE _id = ?'
+    const query = 'UPDATE biblioteca.emprestimos SET data_devolucao = ?, data_emprestimo = ? WHERE _id = ?'
     try {
-      const resultado = await executaComandoSQL(query, [novoEmprestimo.dataDevolucao, id])
+      const resultado = await executaComandoSQL(query, [novoEmprestimo.dataDevolucao, novoEmprestimo.dataEmprestimo, id])
       return new Promise<Emprestimo>((resolve) => {
         resolve(resultado)
       })

@@ -3,7 +3,7 @@ import { atualizarCategoriaPorId, consultarCategoriaPorId, deletarCategoriaPorId
 import { atualizarLivroPorId, consultarLivroPorId, deletarLivroPorId, inserirLivro, listarLivros } from './controller/LivroController'
 import { atualizarPessoaPorId, consultarPessoaPorId, deletarPessoaPorId, inserirPessoa, listarPessoas } from './controller/PessoaController'
 import { atualizarUsuarioPorId, consultarUsuarioPorId, deletarUsuarioPorId, inserirUsuario, listarUsuarios } from './controller/UsuarioController'
-import { inserirEmprestimo } from './controller/EmprestimoController'
+import { atualizarEmprestimoPorId, consultarEmprestimoPorId, deletarEmprestimoPorId, inserirEmprestimo, listarEmprestimos } from './controller/EmprestimoController'
 
 const app = express()
 const PORT = process.env.PORT ?? 3000
@@ -29,6 +29,10 @@ app.get('/usuario', listarUsuarios)
 
 //EMPRESTIMO ENDPOINTS
 app.post('/emprestimo', inserirEmprestimo)
+app.get('/emprestimo/:id', consultarEmprestimoPorId)
+app.delete('/emprestimo/:id', deletarEmprestimoPorId)
+app.put('/emprestimo/:id', atualizarEmprestimoPorId)
+app.get('/emprestimo', listarEmprestimos)
 
 //LIVRO ENDPOINTS
 app.post('/livro', inserirLivro)

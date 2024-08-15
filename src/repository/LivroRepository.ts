@@ -13,7 +13,7 @@ export class LivroRepository {
       titulo VARCHAR(50) NOT NULL,
       autor VARCHAR(50) NOT NULL,
       categoriaId INT NOT NULL,
-      FOREIGN KEY (categoriaId) REFERENCES biblioteca.categorias(_id)
+      FOREIGN KEY (categoriaId) REFERENCES biblioteca.categoria(_id)
 );
 `
     try {
