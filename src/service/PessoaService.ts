@@ -1,10 +1,10 @@
-import { Pessoa } from "../model/Pessoa"
+import { Pessoa } from "../model/entity/Pessoa"
 import { PessoaRepository } from '../repository/PessoaRepository'
 
 export class PessoaService {
   pessoaRepository = new PessoaRepository();
 
-  async inserirLivro(pessoa: Pessoa): Promise<Pessoa> {
+  async inserirLivro(pessoa: any): Promise<Pessoa> {
     const existeEmail = await this.pessoaRepository.consultarPessoaPorEmail(pessoa.email)
     if (existeEmail) throw new Error('Já existe uma pessoa cadastrada com esse email.')
     const novaPessoa = new Pessoa(pessoa.id, pessoa.nome, pessoa.email)
@@ -26,7 +26,7 @@ export class PessoaService {
     return deletarPessoa
   }
 
-  async atualizarPessoaPorId(novaPessoa: Pessoa, id: any): Promise<Pessoa | null> {
+  async atualizarPessoaPorId(novaPessoa: any, id: any): Promise<Pessoa | null> {
     const consultarId = await this.pessoaRepository.consultarPessoaPorId(id)
     if (!consultarId) throw new Error('Não existe pessoa com esse id para ser atualizado.')
     const novaPessoaAdicionada = await this.pessoaRepository.atualizarPessoaPorId(novaPessoa, id)

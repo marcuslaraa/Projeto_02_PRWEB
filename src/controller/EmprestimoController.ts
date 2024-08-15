@@ -1,49 +1,83 @@
 import { Request, Response } from 'express'
 import { EmprestimoService } from '../service/EmprestimoService'
+import { Body, Controller, Delete, Get, Post, Put, Res, Route, Tags, TsoaResponse } from 'tsoa'
+import { BasicResponseDto } from '../model/dto/BasicResponseDto'
+import { EmprestimoRequestDto } from '../model/dto/EmprestimoRequestDto'
 
-const emprestimoService = new EmprestimoService()
+@Route("emprestimo")
+@Tags("Emprestimo")
+export class EmprestimoController extends Controller {
 
-export async function inserirEmprestimo(req: Request, res: Response) {
-  try {
-    const novoEmprestimo = await emprestimoService.inserirEmprestimo(req.body)
-    res.status(201).json({ mensagem: 'Emprestimo inserido com sucesso', novoEmprestimo })
-  } catch (err: any) {
-    res.status(400).json({ mensagem: err.message })
+  emprestimoService = new EmprestimoService()
+
+  @Post()
+  async inserirEmprestimo(
+    @Body() dto: EmprestimoRequestDto,
+    @Res() fail: TsoaResponse<400, BasicResponseDto>,
+    @Res() success: TsoaResponse<201, BasicResponseDto>
+  ) {
+    try {
+      const novoEmprestimo = await this.emprestimoService.inserirEmprestimo(dto)
+      return success(201, new BasicResponseDto("Emprestimo inserido com sucesso", novoEmprestimo))
+    } catch (err: any) {
+      return fail(400, new BasicResponseDto(err.message, undefined))
+    }
   }
-}
 
-export async function consultarEmprestimoPorId(req: Request, res: Response) {
-  try {
-    const consultarEmprestimo = await emprestimoService.consultarEmprestimoPorId(req.params.id)
-    res.status(200).json({ mensagem: 'Emprestimo encontrado com sucesso.', consultarEmprestimo })
-  } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+  @Get('{id}')
+  async consultarEmprestimoPorId(
+    id: number,
+    @Res() fail: TsoaResponse<404, BasicResponseDto>,
+    @Res() success: TsoaResponse<200, BasicResponseDto>
+  ) {
+    try {
+      const consultarEmprestimo = await this.emprestimoService.consultarEmprestimoPorId(id)
+      return success(200, new BasicResponseDto("Emprestimo encontrado com sucesso", consultarEmprestimo))
+    } catch (err: any) {
+      return fail(404, new BasicResponseDto(err.message, undefined))
+    }
   }
-}
 
-export async function deletarEmprestimoPorId(req: Request, res: Response) {
-  try {
-    const deletarLivro = await emprestimoService.deletarEmprestimoPorId(req.params.id)
-    res.status(200).json({ mensagem: 'Emprestimo deletado com sucesso.' })
-  } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+  @Delete('{id}')
+  async deletarEmprestimoPorId(
+    id: number,
+    @Res() fail: TsoaResponse<404, BasicResponseDto>,
+    @Res() success: TsoaResponse<200, BasicResponseDto>
+  ) {
+    try {
+      const deletarLivro = await this.emprestimoService.deletarEmprestimoPorId(id)
+      return success(200, new BasicResponseDto("Emprestimo deletado com sucesso", deletarLivro))
+    } catch (err: any) {
+      return fail(404, new BasicResponseDto(err.message, undefined))
+    }
   }
-}
 
-export async function atualizarEmprestimoPorId(req: Request, res: Response) {
-  try {
-    const atualizarCategoria = await emprestimoService.atualizarEmprestimoPorId(req.body, req.params.id)
-    res.status(200).json({ mensagem: 'Emprestimo atualizado com sucesso.' })
-  } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+  @Put('{id}')
+  async atualizarEmprestimoPorId(
+    id: number,
+    @Body() dto: EmprestimoRequestDto,
+    @Res() fail: TsoaResponse<400, BasicResponseDto>,
+    @Res() success: TsoaResponse<201, BasicResponseDto>
+  ) {
+    try {
+      const atualizarCategoria = await this.emprestimoService.atualizarEmprestimoPorId(dto, id)
+      return success(201, new BasicResponseDto("Emprestimo atualizado com sucesso", atualizarCategoria))
+    } catch (err: any) {
+      return fail(400, new BasicResponseDto(err.message, undefined))
+    }
   }
-}
 
-export async function listarEmprestimos(req: Request, res: Response) {
-  try {
-    const listarTodosEmprestimos = await emprestimoService.listarEmprestimos()
-    res.status(200).json({ mensagem: 'Emprestimos encontradas com sucesso', listarTodosEmprestimos })
-  } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+  @Get()
+  async listarEmprestimos(
+    @Res() fail: TsoaResponse<404, BasicResponseDto>,
+    @Res() success: TsoaResponse<200, BasicResponseDto>
+  ) {
+    try {
+      const listarTodosEmprestimos = await this.emprestimoService.listarEmprestimos()
+      return success(200, new BasicResponseDto("Emprestimos encontrados com sucesso", listarTodosEmprestimos))
+    } catch (err: any) {
+      return fail(404, new BasicResponseDto(err.message, undefined))
+    }
   }
+
 }

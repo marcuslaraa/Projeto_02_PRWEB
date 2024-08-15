@@ -1,49 +1,80 @@
 import { Request, Response } from 'express'
 import { CategoriaService } from '../service/CategoriaService'
+import { Body, Controller, Delete, Get, Post, Put, Res, Route, SuccessResponse, Tags, TsoaResponse } from 'tsoa'
+import { CategoriaRequestDto } from '../model/dto/CategoriaRequestDto'
+import { BasicResponseDto } from '../model/dto/BasicResponseDto'
 
-const categoriaService = new CategoriaService()
+@Route('categoria')
+@Tags('Categoria')
+export class CategoriaController extends Controller {
 
-export async function inserirCategoria(req: Request, res: Response) {
+categoriaService = new CategoriaService()
+
+@Post()
+ async inserirCategoria(
+  @Body() dto: CategoriaRequestDto,
+  @Res() fail: TsoaResponse<400, BasicResponseDto>,
+  @Res () success : TsoaResponse <201 , BasicResponseDto >) {
   try {
-    const novaCategoria = await categoriaService.inserirCategoria(req.body)
-    res.status(201).json({ mensagem: 'Categoria inserida com sucesso', novaCategoria })
+    const novaCategoria = await this.categoriaService.inserirCategoria(dto)
+    return success(201, new BasicResponseDto('Categoria inserida com sucesso', novaCategoria))
   } catch (err: any) {
-    res.status(400).json({ mensagem: err.message })
+    return fail(400, new BasicResponseDto(err.message, undefined))
   }
 }
 
-export async function consultarCategoriaPorId(req: Request, res: Response) {
+@Get('{id}')
+ async consultarCategoriaPorId(
+  id: number,
+  @Res() fail: TsoaResponse<404, BasicResponseDto>,
+  @Res () success : TsoaResponse <200 , BasicResponseDto >) {
   try {
-    const consultarCategoria = await categoriaService.consultarCategoriaPorId(req.params.id)
-    res.status(200).json({ mensagem: 'Categoria encontrada com sucesso.', consultarCategoria })
+    const consultarCategoria = await this.categoriaService.consultarCategoriaPorId(id)
+    return success(200, new BasicResponseDto('Categoria encontrada com sucesso', consultarCategoria))
   } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+    return fail(404, new BasicResponseDto(err.message, undefined))
   }
 }
 
-export async function deletarCategoriaPorId(req: Request, res: Response) {
+@Delete('{id}')
+ async  deletarCategoriaPorId(
+  id: number,
+  @Res() fail: TsoaResponse<404, BasicResponseDto>,
+  @Res () success : TsoaResponse <200 , BasicResponseDto >) {
   try {
-    const deletarCategoria = await categoriaService.deletarCategoriaPorId(req.params.id)
-    res.status(200).json({ mensagem: 'Categoria deletado com sucesso.' })
+    const categoriaDeletada = await this.categoriaService.consultarCategoriaPorId(id)
+    await this.categoriaService.deletarCategoriaPorId(id)
+    return success(200, new BasicResponseDto('Categoria deletada com sucesso', categoriaDeletada))
   } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+    return fail(404, new BasicResponseDto(err.message, undefined))
   }
 }
 
-export async function atualizarCategoriaPorId(req: Request, res: Response) {
+@Put('{id}')
+ async  atualizarCategoriaPorId(
+  id: number,
+  @Body() dto: CategoriaRequestDto,
+  @Res() fail: TsoaResponse<404, BasicResponseDto>,
+  @Res () success : TsoaResponse <200 , BasicResponseDto >) {
   try {
-    const atualizarCategoria = await categoriaService.atualizarCategoriaPorId(req.body, req.params.id)
-    res.status(200).json({ mensagem: 'Categoria atualizada com sucesso.' })
+    const atualizaCategoria = await this.categoriaService.atualizarCategoriaPorId(dto, id)
+    const novoategoria = await this.categoriaService.consultarCategoriaPorId(id)
+    return success(200, new BasicResponseDto('Categoria atualizada com sucesso', novoategoria))
   } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+    return fail(404, new BasicResponseDto(err.message, undefined))
   }
 }
 
-export async function listarCategorias(req: Request, res: Response) {
+@Get()
+ async  listarCategorias(
+  @Res() fail: TsoaResponse<404, BasicResponseDto>,
+  @Res () success : TsoaResponse <200 , BasicResponseDto >) {
   try {
-    const listarTodasCategorias = await categoriaService.listarCategorias()
-    res.status(200).json({ mensagem: 'Categorias encontradas com sucesso', listarTodasCategorias })
+    const listarTodasCategorias = await this.categoriaService.listarCategorias()
+    return success(200, new BasicResponseDto('Categoria encontradas com sucesso', listarTodasCategorias))
   } catch (err: any) {
-    res.status(404).json({ mensagem: err.message })
+    return fail(404, new BasicResponseDto(err.message, undefined))
   }
+}
+
 }

@@ -1,5 +1,5 @@
 import { executaComandoSQL } from "../database/mysql"
-import { Livro } from "../model/Livro"
+import { Livro } from "../model/entity/Livro"
 
 export class LivroRepository {
   constructor() {
@@ -57,7 +57,7 @@ export class LivroRepository {
     }
   }
 
-  async consultarLivroPorID(id: number): Promise<Livro | null> {
+  async consultarLivroPorId(id: number): Promise<Livro | null> {
     const query = 'SELECT * FROM biblioteca.livros WHERE _id = ?'
     try {
       const resultado = await executaComandoSQL(query, [id])

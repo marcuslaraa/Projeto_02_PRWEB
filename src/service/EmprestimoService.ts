@@ -1,5 +1,5 @@
-import { IEmprestimo } from '../Interfaces/IEmprestimos'
-import { Emprestimo } from "../model/Emprestimo"
+import { IEmprestimo } from '../Interfaces/IEmprestimo'
+import { Emprestimo } from "../model/entity/Emprestimo"
 import { EmprestimoRepository } from '../repository/EmprestimoRepository'
 import { LivroRepository } from '../repository/LivroRepository'
 import { UsuarioRepository } from '../repository/UsuarioRepository'
@@ -11,8 +11,8 @@ export class EmprestimoService {
   livroRepository = new LivroRepository()
   usuarioRepository = new UsuarioRepository()
 
-  async inserirEmprestimo(emprestimo: IEmprestimo): Promise<Emprestimo> {
-    const existeLivro = await this.livroRepository.consultarLivroPorID(emprestimo.livroId)
+  async inserirEmprestimo(emprestimo: any): Promise<Emprestimo> {
+    const existeLivro = await this.livroRepository.consultarLivroPorId(emprestimo.livroId)
     if (!existeLivro) throw new Error('Não existe livro.')
 
     const existeUsuario = await this.usuarioRepository.consultarUsuarioPorId(emprestimo.usuarioId)
@@ -28,13 +28,13 @@ export class EmprestimoService {
     let dataDevolucao
 
     if (verificaFormatoData(emprestimo.dataEmprestimo) && verificaFormatoData(emprestimo.dataDevolucao)) {
-       dataEmprestimo = stringParaData(emprestimo.dataEmprestimo)
-       dataDevolucao = stringParaData(emprestimo.dataDevolucao)
+      dataEmprestimo = stringParaData(emprestimo.dataEmprestimo)
+      dataDevolucao = stringParaData(emprestimo.dataDevolucao)
     } else {
       throw new Error('Datas não estão no formato correto.')
     }
 
-    const novoEmprestimo = new Emprestimo(emprestimo.id, emprestimo.livroId, emprestimo.usuarioId, dataEmprestimo, dataDevolucao )
+    const novoEmprestimo = new Emprestimo(emprestimo.id, emprestimo.livroId, emprestimo.usuarioId, dataEmprestimo, dataDevolucao)
     const inserirNovoEmprestimo = await this.emprestimoRepository.inserirEmprestimo(novoEmprestimo)
 
     return inserirNovoEmprestimo
@@ -53,20 +53,20 @@ export class EmprestimoService {
     return deletarLivro
   }
 
-  async atualizarEmprestimoPorId(novoLivro: IEmprestimo, id: any): Promise<Emprestimo | null> {
+  async atualizarEmprestimoPorId(novoLivro: any, id: any): Promise<Emprestimo | null> {
     const consultarId = await this.emprestimoRepository.consultarEmprestimoPorId(id)
 
     let dataEmprestimo
     let dataDevolucao
 
     if (verificaFormatoData(novoLivro.dataEmprestimo) && verificaFormatoData(novoLivro.dataDevolucao)) {
-       dataEmprestimo = stringParaData(novoLivro.dataEmprestimo)
-       dataDevolucao = stringParaData(novoLivro.dataDevolucao)
+      dataEmprestimo = stringParaData(novoLivro.dataEmprestimo)
+      dataDevolucao = stringParaData(novoLivro.dataDevolucao)
     } else {
       throw new Error('Datas não estão no formato correto.')
     }
 
-    const novoEmprestimo = new Emprestimo(novoLivro.id, novoLivro.livroId, novoLivro.usuarioId, dataEmprestimo, dataDevolucao )
+    const novoEmprestimo = new Emprestimo(novoLivro.id, novoLivro.livroId, novoLivro.usuarioId, dataEmprestimo, dataDevolucao)
 
     if (!consultarId) throw new Error('Não existe emprestimo com esse id para ser atualizado.')
     const novaLivroAdicionado = await this.emprestimoRepository.atualizarEmprestimoPorId(novoEmprestimo, id)

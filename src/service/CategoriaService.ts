@@ -1,4 +1,4 @@
-import { Categoria } from "../model/Categoria"
+import { Categoria } from "../model/entity/Categoria"
 import { CategoriaRepository } from "../repository/CategoriaRepository"
 import { LivroRepository } from '../repository/LivroRepository'
 
@@ -6,7 +6,7 @@ export class CategoriaService {
   categoriaRepository = new CategoriaRepository();
   livroRepository = new LivroRepository()
 
-  async inserirCategoria(categoria: Categoria): Promise<Categoria> {
+  async inserirCategoria(categoria: any): Promise<Categoria> {
     const consultaCategoria = await this.categoriaRepository.consultarCategoriaPorNome(categoria.nome)
     if (consultaCategoria) throw new Error('Já existe uma categoria com esse nome.')
     const novaCategoria = new Categoria(categoria.id, categoria.nome)
@@ -23,14 +23,14 @@ export class CategoriaService {
 
   async deletarCategoriaPorId(id: any): Promise<Categoria> {
     const consultaCategoria = await this.categoriaRepository.consultarCategoriaPorID(id)
-    const consultarCategoriaEmLivros = await this.livroRepository.consultarLivroPorID(id)
+    const consultarCategoriaEmLivros = await this.livroRepository.consultarLivroPorId(id)
     if (consultarCategoriaEmLivros) throw new Error('Não pode deletar categorias que estão aplicadas em algum livro.')
     if (!consultaCategoria) throw new Error('Não existe categoria com esse id')
     const deletarCategoria = await this.categoriaRepository.deletarCategoriaPorId(id)
     return deletarCategoria
   }
 
-  async atualizarCategoriaPorId(novaCategoria: Categoria, id: any): Promise<Categoria | null> {
+  async atualizarCategoriaPorId(novaCategoria: any, id: any): Promise<Categoria | null> {
     const consultarId = await this.categoriaRepository.consultarCategoriaPorID(id)
     if (!consultarId) throw new Error('Não existe categoria com esse id para ser atuazliado.')
     const consultaNome = await this.categoriaRepository.consultarCategoriaPorNome(novaCategoria.nome)

@@ -1,5 +1,5 @@
 import { executaComandoSQL } from "../database/mysql"
-import { Categoria } from "../model/Categoria"
+import { Categoria } from "../model/entity/Categoria"
 
 export class CategoriaRepository {
   constructor() {
