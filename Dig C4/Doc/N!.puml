@@ -1,0 +1,10 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(bibliotecario, "Bibliotecário")
+System_Boundary(c1, "Biblioteca") {
+    System(api, "API de Gerenciamento de Biblioteca", "TypeScript, Express", "Gerencia livros e empréstimos")
+}
+
+Rel(bibliotecario, api, "Gerencia livros e usuários")
+@enduml
