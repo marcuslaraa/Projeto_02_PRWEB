@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(api, "API de Gerenciamento", "TypeScript, Express", "Responsável pela lógica de negócios")
+ContainerDb(database, "Banco de Dados", "MySQL", "Armazena informações sobre livros, usuários e empréstimos")
+
+Container_Boundary(c1, "Componentes Internos da API") {
+    Component(userController, "Controlador de Usuários", "Express + TSOA", "Gerencia operações relacionadas a usuários")
+    Component(bookController, "Controlador de Livros", "Express + TSOA", "Gerencia operações relacionadas a livros")
+    Component(loanController, "Controlador de Empréstimos", "Express + TSOA", "Gerencia operações de empréstimos")
+    Component(userService, "Serviço de Usuários", "TypeScript Service", "Lógica de negócio relacionada a usuários")
+    Component(bookService, "Serviço de Livros", "TypeScript Service", "Lógica de negócio relacionada a livros")
+    Component(loanService, "Serviço de Empréstimos", "TypeScript Service", "Lógica de negócio relacionada a empréstimos")
+    Component(userRepository, "Repositório de Usuários", "TypeORM", "Acesso aos dados de usuários")
+    Component(bookRepository, "Repositório de Livros", "TypeORM", "Acesso aos dados de livros")
+    Component(loanRepository, "Repositório de Empréstimos", "TypeORM", "Acesso aos dados de empréstimos")
+}
+
+Rel(api, userController, "Controla operações de usuários", "HTTP/JSON")
+Rel(api, bookController, "Controla operações de livros", "HTTP/JSON")
+Rel(api, loanController, "Controla operações de empréstimos", "HTTP/JSON")
+
+Rel(userController, userService, "Chama", "HTTP/JSON")
+Rel(bookController, bookService, "Chama", "HTTP/JSON")
+Rel(loanController, loanService, "Chama", "HTTP/JSON")
+
+Rel(userService, userRepository, "Lê e escreve dados no banco", "HTTP/JSON")
+Rel(bookService, bookRepository, "Lê e escreve dados no banco", "HTTP/JSON")
+Rel(loanService, loanRepository, "Lê e escreve dados no banco", "HTTP/JSON")
+
+Rel(userRepository, database, "Lê e grava dados", "SQL")
+Rel(bookRepository, database, "Lê e grava dados", "SQL")
+Rel(loanRepository, database, "Lê e grava dados", "SQL")
+
+@enduml

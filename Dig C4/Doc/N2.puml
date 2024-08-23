@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(bibliotecario, "Bibliotecário")
+
+System_Boundary(c1, "Biblioteca") {
+    Container(api, "API de Gerenciamento", "TypeScript, Express", "Responsável pela lógica de negócios")
+    ContainerDb(database, "Banco de Dados", "MySQL", "Armazena informações sobre livros, usuários e empréstimos")
+    Container(spa, "Aplicação Web", "TypeScript, React", "Interface para bibliotecários")
+    Container(swagger, "Swagger UI", "Swagger", "Documentação da API")
+}
+
+Rel(bibliotecario, spa, "Utiliza para acessar o sistema", "HTTP/JSON")
+Rel(spa, api, "Realiza chamadas para", "HTTP/JSON")
+Rel(api, database, "Lê e grava dados", "SQL")
+Rel(api, swagger, "Exibe documentação da API", "HTTP/JSON")
+
+@enduml
